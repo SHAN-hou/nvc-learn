@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>非暴力沟通 · 学习卡</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#faf6ee; --ink:#1a1a1a; --muted:#6b6357; --line:#ece4d2;
+    --sage:#5b8a72; --rose:#c46a6a; --gold:#caa75d; --card:#ffffff;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    font-size:15px;line-height:1.6}
+  .serif,h1,h2,h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-weight:700}
+  a{color:inherit}
+  /* top header */
+  .top{position:sticky;top:0;z-index:30;background:rgba(250,246,238,.96);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);padding:env(safe-area-inset-top) 0 0 0}
+  .top-in{padding:10px 14px 0 14px;display:flex;align-items:center;justify-content:space-between}
+  .brand{font-family:"Noto Serif SC",serif;font-weight:700;font-size:16px}
+  .brand span{color:#a89c84;font-weight:400;font-size:12px;margin-left:4px}
+  /* tabs */
+  .tabs{display:flex;overflow-x:auto;gap:6px;padding:10px 12px 10px 12px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;padding:7px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);
+    font-size:13px;color:#555;cursor:pointer;transition:all .2s}
+  .tab.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  /* page */
+  .wrap{padding:14px 14px calc(40px + env(safe-area-inset-bottom)) 14px;max-width:720px;margin:0 auto}
+  .view{display:none;animation:fade .25s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  /* cards */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+  .card h3{margin:0 0 6px 0;font-size:15px}
+  .muted{color:var(--muted);font-size:13px}
+  .chip{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;line-height:1.5;background:#f1ece0;color:#6b6357}
+  .chip.sage{background:rgba(91,138,114,.12);color:var(--sage)}
+  .chip.rose{background:rgba(196,106,106,.12);color:var(--rose)}
+  .chip.gold{background:rgba(202,167,93,.18);color:#8f7330}
+  /* grid */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .grid2>*{margin:0}
+  @media (max-width:420px){ .grid2{grid-template-columns:1fr} }
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;
+    border:1px solid var(--line);background:#fff;font-size:13px;cursor:pointer}
+  .btn.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .btn.sm{padding:5px 12px;font-size:12px}
+  .btn:active{transform:scale(.97)}
+  input,textarea{font-family:inherit;font-size:14px;width:100%;padding:10px 12px;
+    border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  textarea{resize:vertical;min-height:60px}
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+  details>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:500}
+  details>summary::-webkit-details-marker{display:none}
+  details[open]>summary .arrow{transform:rotate(180deg)}
+  .arrow{transition:transform .2s}
+  /* hero */
+  .hero{padding:20px 16px 10px}
+  .hero h1{font-size:26px;line-height:1.3;margin:6px 0 8px 0}
+  .hero .sub{color:var(--muted);font-size:14px}
+  /* step model */
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .step .n{font-family:"Noto Serif SC",serif;font-size:20px;color:var(--sage);font-weight:700}
+  .step h4{margin:2px 0 4px 0;font-size:14px}
+  .step p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
+  .template{background:linear-gradient(135deg,#fff,#f6efde);border:1px solid var(--line);
+    border-radius:14px;padding:14px;margin-top:10px;font-size:14px;line-height:2}
+  .mark-o{background:rgba(91,138,114,.18);padding:1px 6px;border-radius:5px}
+  .mark-f{background:rgba(196,106,106,.15);padding:1px 6px;border-radius:5px}
+  .mark-n{background:rgba(202,167,93,.22);padding:1px 6px;border-radius:5px}
+  .mark-r{background:#e9e3d4;padding:1px 6px;border-radius:5px}
+  /* quiz */
+  .qbox{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px;background:#fff}
+  .qbox .q{font-size:14px;color:var(--ink);margin-bottom:8px}
+  .opts{display:flex;flex-wrap:wrap;gap:6px}
+  .opt{padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);cursor:pointer;font-size:13px}
+  .opt.correct{background:rgba(91,138,114,.14);border-color:var(--sage);color:var(--sage)}
+  .opt.wrong{background:rgba(196,106,106,.12);border-color:var(--rose);color:var(--rose)}
+  .r{font-size:12px;margin-top:6px;min-height:18px}
+  .r.ok{color:var(--sage)} .r.bad{color:var(--rose)}
+  /* scenario */
+  .scene{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+  .scene .bad{background:rgba(196,106,106,.08);padding:8px 10px;border-radius:8px;font-size:13px;margin:6px 0}
+  .scene .good{background:rgba(91,138,114,.08);padding:8px 10px;border-radius:8px;font-size:13px;margin:6px 0}
+  .scene .why{font-size:12px;color:var(--muted);margin-top:4px}
+  /* vocab */
+  .vocab{line-height:2.2;font-size:13px;color:#3d372d}
+  .vocab span{display:inline-block;background:#fff;border:1px solid var(--line);padding:2px 10px;border-radius:999px;margin:2px}
+  /* footer */
+  .foot{text-align:center;color:#a89c84;font-size:11px;padding:20px 14px 10px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <div class="brand">非暴力沟通 <span>NVC · 学习卡</span></div>
+    <div class="chip sage" id="progress">0/8 练习</div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-v="home">开始</button>
+    <button class="tab" data-v="model">四要素</button>
+    <button class="tab" data-v="chapters">十三章</button>
+    <button class="tab" data-v="practice">练习</button>
+    <button class="tab" data-v="scene">场景</button>
+    <button class="tab" data-v="mistakes">常见误区</button>
+    <button class="tab" data-v="phrases">改写库</button>
+    <button class="tab" data-v="vocab">词汇</button>
+    <button class="tab" data-v="daily">日常</button>
+    <button class="tab" data-v="cheat">速查</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- =========== HOME =========== -->
+<section class="view active" id="v-home">
+  <div class="hero">
+    <span class="chip sage">马歇尔·卢森堡</span>
+    <h1>语言是窗户，<br/>或者是墙。</h1>
+    <p class="sub">13 章 · 四要素 · 8 个互动练习 · 40+ 场景改写。每天 3 分钟，让日常对话多一点连接，少一点火药。</p>
+  </div>
+  <div class="card">
+    <h3>这份学习卡怎么用</h3>
+    <p class="muted" style="margin:4px 0 0 0">顶部标签横向切换，无需上下长翻。建议顺序：<b>四要素 → 十三章 → 练习 → 场景 → 日常</b>。遇到情绪上头时，打开「速查」即刻使用。</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><span class="chip sage">核心</span><h3>OFNR 四要素</h3><p class="muted">观察 · 感受 · 需要 · 请求。一句话公式。</p></div>
+    <div class="card"><span class="chip rose">避免</span><h3>四种异化语言</h3><p class="muted">评判 · 比较 · 回避责任 · 强人所难。</p></div>
+    <div class="card"><span class="chip gold">倾听</span><h3>共情四步</h3><p class="muted">听到对方的 OFNR，而不是急着回应。</p></div>
+    <div class="card"><span class="chip">内在</span><h3>爱自己</h3><p class="muted">把"应该"改为"选择"，哀悼而非自责。</p></div>
+  </div>
+</section>
+
+<!-- =========== MODEL =========== -->
+<section class="view" id="v-model">
+  <h2 style="margin:6px 0 4px;font-size:22px">四要素 OFNR</h2>
+  <p class="muted" style="margin:0 0 8px">诚实地表达自己 + 关切地倾听他人，用的都是同一个公式。</p>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><h4>观察 Observation</h4><p>只陈述事实，像摄像机。<br/>✗ 你总是迟到<br/>✓ 这周 3 次会议你晚到 15 分钟</p></div>
+    <div class="step"><div class="n">02</div><h4>感受 Feeling</h4><p>情绪，而非想法/评判。<br/>✗ 我觉得你不尊重我<br/>✓ 我感到失落、担忧</p></div>
+    <div class="step"><div class="n">03</div><h4>需要 Need</h4><p>感受背后的需要。<br/>✓ 我看重可预期、互相尊重</p></div>
+    <div class="step"><div class="n">04</div><h4>请求 Request</h4><p>具体、当下、可执行。<br/>✓ 下次若会晚，可否提前 10 分钟告诉我？</p></div>
+  </div>
+  <div class="template">
+    当我看到/听到 <span class="mark-o">[观察]</span>，我感到 <span class="mark-f">[感受]</span>，因为我需要/看重 <span class="mark-n">[需要]</span>。<br/>你是否愿意 <span class="mark-r">[具体请求]</span>？
+  </div>
+  <div class="card" style="margin-top:10px">
+    <h3>倾听时反过来用</h3>
+    <p class="muted">"你是不是因为 <span class="mark-o">[他做了什么]</span>，感到 <span class="mark-f">[什么]</span>，因为你需要 <span class="mark-n">[什么]</span>，希望 <span class="mark-r">[什么具体改变]</span>？"</p>
+  </div>
+
+  <div class="card">
+    <h3>请求的 3 个标准</h3>
+    <ul style="margin:4px 0 0 18px;padding:0"><li>具体可观察的行为，而非模糊态度</li><li>当下/短期内可执行</li><li>对方说"不"仍被尊重——否则就是命令</li></ul>
+  </div>
+  <div class="card">
+    <h3>感受的 2 类信号</h3>
+    <p class="muted">① 需要被满足时：兴奋、感激、平静……<br/>② 需要未被满足时：愤怒、失望、孤单……</p>
+    <p class="muted" style="margin-top:6px">⚠ "被忽视/被利用/被抛弃/被背叛"——这些看似感受，其实是<b>解读</b>，藏着评判。</p>
+  </div>
+</section>
+
+<!-- =========== CHAPTERS =========== -->
+<section class="view" id="v-chapters">
+  <h2 style="margin:6px 0 4px;font-size:22px">十三章速通</h2>
+  <p class="muted" style="margin:0 0 10px">每章一个可用的方法。点开看要点。</p>
+  <div id="chapter-list"></div>
+</section>
+
+<!-- =========== PRACTICE =========== -->
+<section class="view" id="v-practice">
+  <h2 style="margin:6px 0 4px;font-size:22px">互动练习</h2>
+  <p class="muted" style="margin:0 0 10px">8 个练习覆盖全部可操作技巧。</p>
+
+  <details open><summary><span><span class="chip sage">第3章</span> 练习 1 · 观察 vs 评论</span><span class="arrow">▾</span></summary>
+    <div id="q-obs" style="margin-top:8px"></div>
+  </details>
+
+  <details><summary><span><span class="chip rose">第4章</span> 练习 2 · 感受 vs 想法</span><span class="arrow">▾</span></summary>
+    <p class="muted" style="margin:8px 0">多选：勾出真正的感受词（非判断/解读）。</p>
+    <div id="q-feel" class="opts"></div>
+    <button id="q-feel-check" class="btn dark sm" style="margin-top:8px">检查答案</button>
+    <div id="q-feel-result" class="r"></div>
+  </details>
+
+  <details><summary><span><span class="chip gold">第5章</span> 练习 3 · 指责背后的需要</span><span class="arrow">▾</span></summary>
+    <div id="q-need" style="margin-top:8px"></div>
+  </details>
+
+  <details><summary><span><span class="chip">第6章</span> 练习 4 · 请求 vs 命令</span><span class="arrow">▾</span></summary>
+    <div id="q-req" style="margin-top:8px"></div>
+  </details>
+
+  <details><summary><span><span class="chip sage">综合</span> 练习 5 · 四步表达生成器</span><span class="arrow">▾</span></summary>
+    <div style="display:grid;gap:8px;margin-top:8px">
+      <label class="muted" style="font-size:12px">① 观察<textarea id="g1" rows="2" placeholder="具体事实，例：昨晚 11 点你在群里发了 5 条工作消息"></textarea></label>
+      <label class="muted" style="font-size:12px">② 感受<input id="g2" placeholder="例：疲惫、有压力" /></label>
+      <label class="muted" style="font-size:12px">③ 需要 / 看重<input id="g3" placeholder="例：休息、工作与生活的边界" /></label>
+      <label class="muted" style="font-size:12px">④ 请求（具体、可执行）<input id="g4" placeholder="例：晚上 9 点后非紧急消息可否次日再发？" /></label>
+      <button id="g-build" class="btn dark sm" style="justify-self:start">生成完整表达</button>
+      <div id="g-out" class="template" style="display:none"></div>
+    </div>
+  </details>
+
+  <details><summary><span><span class="chip sage">第7-8章</span> 练习 6 · 共情倾听</span><span class="arrow">▾</span></summary>
+    <p class="muted" style="margin:8px 0">先不要建议/安慰/辩解，选出最共情的回应：</p>
+    <div id="q-listen"></div>
+  </details>
+
+  <details><summary><span><span class="chip rose">第10章</span> 练习 7 · 愤怒四步</span><span class="arrow">▾</span></summary>
+    <ol style="margin:8px 0 0 18px;padding:0;line-height:1.9">
+      <li><b>停。</b>除了呼吸什么都不做。</li>
+      <li><b>辨。</b>是哪个想法让我生气？（他不应该…）</li>
+      <li><b>寻。</b>我未被满足的需要是什么？</li>
+      <li><b>说。</b>用感受 + 需要 + 请求表达。</li>
+    </ol>
+    <p class="muted" style="margin-top:8px">记：愤怒不是被别人"惹"出来的，而是我们脱离了自己的需要、去评判对方的信号。</p>
+  </details>
+
+  <details><summary><span><span class="chip gold">第9章</span> 练习 8 · 应该 → 选择</span><span class="arrow">▾</span></summary>
+    <p class="muted" style="margin:8px 0">看清动机：心甘情愿就做，否则停下。</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <input id="s1" placeholder="不得不做的事"/>
+      <input id="s2" placeholder="真正想要 / 看重的"/>
+    </div>
+    <button id="s-build" class="btn dark sm" style="margin-top:8px">改写</button>
+    <div id="s-out" style="margin-top:8px"></div>
+  </details>
+</section>
+
+<!-- =========== SCENE =========== -->
+<section class="view" id="v-scene">
+  <h2 style="margin:6px 0 4px;font-size:22px">场景剧本</h2>
+  <p class="muted" style="margin:0 0 10px">10 个最常见的冲突场景，看 "容易说出口的话" vs "NVC 改写"。</p>
+  <div id="scene-list"></div>
+</section>
+
+<!-- =========== MISTAKES =========== -->
+<section class="view" id="v-mistakes">
+  <h2 style="margin:6px 0 4px;font-size:22px">常见误区</h2>
+  <p class="muted" style="margin:0 0 10px">很多人"学了 NVC 仍然在攻击"，原因通常是踩了这些坑。</p>
+  <div id="mistakes-list"></div>
+</section>
+
+<!-- =========== PHRASES =========== -->
+<section class="view" id="v-phrases">
+  <h2 style="margin:6px 0 4px;font-size:22px">改写库 · 30 句</h2>
+  <p class="muted" style="margin:0 0 10px">日常那些刺人的话，换一种说法。</p>
+  <div id="phrase-list"></div>
+</section>
+
+<!-- =========== VOCAB =========== -->
+<section class="view" id="v-vocab">
+  <h2 style="margin:6px 0 4px;font-size:22px">词汇表</h2>
+  <p class="muted" style="margin:0 0 10px">情绪与需要被命名，才能被照见。</p>
+  <div class="card"><h3>需要被满足时的感受</h3><div class="vocab" id="feel-pos"></div></div>
+  <div class="card"><h3>需要未被满足时的感受</h3><div class="vocab" id="feel-neg"></div></div>
+  <div class="card"><h3 style="color:var(--rose)">⚠ 伪感受（其实是想法/评判）</h3>
+    <div class="vocab" id="pseudo"></div>
+    <p class="muted" style="margin-top:6px;font-size:12px">它们以"被…"或"觉得…"开头，暗含对他人行为的解读。</p>
+  </div>
+  <div class="card"><h3>普世人类需要</h3><div id="needs" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px"></div></div>
+  <div class="card"><h3>评判词红旗</h3>
+    <p class="muted" style="margin:4px 0">这些词一旦出现，基本脱离了"观察"。</p>
+    <div class="vocab" id="redflag"></div>
+  </div>
+</section>
+
+<!-- =========== DAILY =========== -->
+<section class="view" id="v-daily">
+  <h2 style="margin:6px 0 4px;font-size:22px">日常练习</h2>
+  <p class="muted" style="margin:0 0 10px">每天 3 分钟，让 NVC 变成本能。</p>
+  <div class="card">
+    <h3>晨间 · 意图设置（30 秒）</h3>
+    <p class="muted">今天我希望带着什么需要/品质去生活？（例：耐心、连接、诚实）写一个词放在手机锁屏。</p>
+  </div>
+  <div class="card">
+    <h3>日中 · 暂停三问</h3>
+    <ol style="margin:4px 0 0 18px;padding:0">
+      <li>我现在有什么感受？</li>
+      <li>这个感受在提醒我什么需要？</li>
+      <li>我可以向谁提什么具体请求？（包括向自己）</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>晚间 · OFNR 复盘</h3>
+    <p class="muted">回想今天一件不舒服的事，写出四步。写完你会发现：想指责的冲动，多半是某个需要在呼救。</p>
+    <div style="display:grid;gap:6px;margin-top:8px">
+      <input class="j1" placeholder="① 观察">
+      <input class="j2" placeholder="② 感受">
+      <input class="j3" placeholder="③ 需要">
+      <input class="j4" placeholder="④ 对自己/他人的请求">
+      <button id="j-save" class="btn dark sm" style="justify-self:start">保存到本机</button>
+    </div>
+    <div id="j-list" style="margin-top:10px"></div>
+  </div>
+  <div class="card">
+    <h3>感恩三件事（第 13 章）</h3>
+    <p class="muted">每晚写 1 件：对方做了什么 · 满足了我什么需要 · 我此刻的感受。</p>
+  </div>
+  <div class="card">
+    <h3>进阶 · 同理自己</h3>
+    <p class="muted">当内心有批评声："我真糟糕"——试着问：这个批评声在保护什么需要？（通常是：被接纳、被认可、成长）</p>
+  </div>
+</section>
+
+<!-- =========== CHEAT =========== -->
+<section class="view" id="v-cheat">
+  <h2 style="margin:6px 0 4px;font-size:22px">速查卡</h2>
+  <p class="muted" style="margin:0 0 10px">情绪上头时打开。</p>
+  <div class="card"><h3>🚫 蒙蔽爱的四种语言</h3>
+    <ul style="margin:4px 0 0 18px;padding:0">
+      <li><b>道德评判</b>：贴标签、分对错</li><li><b>比较</b>：和谁谁相比</li>
+      <li><b>回避责任</b>："不得不""你让我……"</li><li><b>强人所难</b>：请求变威胁</li>
+    </ul>
+  </div>
+  <div class="card"><h3>🧱 共情的 12 种绊脚石</h3>
+    <p class="muted">急着做以下事，其实是切断了倾听：</p>
+    <ul style="margin:4px 0 0 18px;padding:0;columns:2;font-size:13px">
+      <li>建议</li><li>比较</li><li>说教</li><li>安慰</li><li>辩解</li><li>纠正</li>
+      <li>回忆自己</li><li>否定</li><li>同情</li><li>询问细节</li><li>分析诊断</li><li>转移话题</li>
+    </ul>
+  </div>
+  <div class="card"><h3>💬 表达感谢的 3 件事</h3>
+    <p class="muted">对方<b>做了什么</b> · 满足了我什么<b>需要</b> · 我此刻的<b>感受</b>。不是"你真棒"。</p>
+  </div>
+  <div class="card"><h3>🛡 保护性强制力（第 11 章）</h3>
+    <p class="muted">只用于防伤害，不用于惩罚。前提：无法对话；目的：保护。事后仍要回到对话。</p>
+  </div>
+  <div class="card"><h3>🔁 听到批评时的 4 种反应</h3>
+    <ol style="margin:4px 0 0 18px;padding:0">
+      <li>责备自己（内疚）</li><li>指责对方（愤怒）</li>
+      <li><b>体会自己的感受与需要</b> ✓</li><li><b>体会对方的感受与需要</b> ✓</li>
+    </ol>
+  </div>
+  <div class="card"><h3>📏 请求 vs 命令 如何区分？</h3>
+    <p class="muted">对方说"不"之后，我的反应是什么——<br/>若是理解/好奇 → 那是请求；若是生气/惩罚 → 那是命令。</p>
+  </div>
+  <div class="card"><h3>🫁 情绪强烈时的 90 秒</h3>
+    <p class="muted">身体的情绪化学反应平均 90 秒。深呼吸 6 次，不说话，不做决定。</p>
+  </div>
+</section>
+
+<div class="foot">内容整理自 马歇尔·卢森堡《非暴力沟通》（阮胤华 译）· 个人学习用</div>
+</div>
+
+<script>
+/* ============ Tabs ============ */
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(t=>t.onclick=()=>{
+  tabs.forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('v-'+t.dataset.v).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  // keep tab in view
+  t.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+});
+
+/* ============ Chapters ============ */
+const chapters = [
+ ["第1章","让爱融入生活","NVC 的目的：让给予出于喜悦。",["关心而非反抗","请求而非要求","看见对方的人"]],
+ ["第2章","是什么蒙蔽了爱","四种异化沟通让我们看不见人。",["道德评判","比较","回避责任","强人所难"]],
+ ["第3章","区分观察和评论","克里希那穆提：不带评论的观察是智力的最高形式。",["陈述具体时空","避免'总是/从不/每次'","区分'迟到'与'懒'"]],
+ ["第4章","体会和表达感受","建立感受词汇表，区分感受与想法。",["身体的信号","示弱也是力量","避免'被…'句式"]],
+ ["第5章","感受的根源","他人的言行只是诱因，根源是我们的需要。",["听到批评的4种反应","从'情感奴隶'到'生活主人'","谁的需要？"]],
+ ["第6章","请求帮助","清楚告诉对方，希望他们做什么。",["具体/当下/可执行","请对方复述以确认","说'是'和'不'都被尊重"]],
+ ["第7章","用全身心倾听","放下成见，体会对方的 OFNR。",["不急于建议/安慰","用询问帮助对方表达","直到对方满意"]],
+ ["第8章","倾听的力量","倾听能疗愈痛苦、化解愤怒。",["对自己的痛苦也要倾听","无法倾听时：呼吸/自我同理/暂停"]],
+ ["第9章","爱自己","NVC 最重要的应用：自爱。",["'应该'→'选择'","哀悼而非自责","关注做事的动机"]],
+ ["第10章","充分表达愤怒","愤怒的核心是评判。",["停·辨·寻·说","别人只是诱因","愤怒=未被满足的需要"]],
+ ["第11章","运用强制力避免伤害","无法对话时使用，为保护非惩罚。",["惩罚 vs 保护","事后回到对话","看见行为背后的需要"]],
+ ["第12章","重获生活的热情","用 NVC 取代心理诊断与自我评判。",["专注当下需要","同理代替分析"]],
+ ["第13章","表达感激","行为 / 满足的需要 / 我的感受。",["不是夸奖","给予与接受都是礼物"]]
+];
+const cl = document.getElementById('chapter-list');
+chapters.forEach(([n,t,d,pts])=>{
+  cl.insertAdjacentHTML('beforeend', `
+  <details>
+    <summary><span><span class="chip">${n}</span> <b class="serif" style="margin-left:6px">${t}</b></span><span class="arrow">▾</span></summary>
+    <p class="muted" style="margin:8px 0 4px">${d}</p>
+    <ul style="margin:4px 0 0 18px;padding:0;font-size:13px">${pts.map(p=>`<li>${p}</li>`).join('')}</ul>
+  </details>`);
+});
+
+/* ============ Practice 1: Observation ============ */
+const obsItems = [
+  ["你昨天没有回我的微信。","obs"],["你太冷漠了。","eval"],
+  ["这周 3 次例会你都迟到 10 分钟以上。","obs"],["你从不关心这个项目。","eval"],
+  ["他这次没有完成本周二之前承诺的 PPT。","obs"],["你是个不负责任的人。","eval"],
+  ["她一年里 4 次在会上打断我。","obs"],["你每次都情绪化。","eval"]
+];
+const qo = document.getElementById('q-obs');
+obsItems.forEach((it,i)=>{
+  qo.insertAdjacentHTML('beforeend',`
+   <div class="qbox"><div class="q">${it[0]}</div>
+    <div class="opts">
+      <button class="opt" data-i="${i}" data-v="obs">观察</button>
+      <button class="opt" data-i="${i}" data-v="eval">评论</button>
+    </div><div class="r"></div></div>`);
+});
+qo.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.i,v=b.dataset.v,ans=obsItems[i][1];
+  const box=b.closest('.qbox'),r=box.querySelector('.r');
+  if(r.dataset.d) return; r.dataset.d=1;
+  box.querySelectorAll('.opt').forEach(x=>{
+    if(x.dataset.v===ans) x.classList.add('correct');
+    else if(x===b) x.classList.add('wrong');
+  });
+  r.textContent = v===ans ? '✓ 正确' : '✗ 这是'+(ans==='obs'?'纯观察':'评论（含评判）');
+  r.className = 'r '+(v===ans?'ok':'bad');
+  markDone('p1');
+});
+
+/* ============ Practice 2: Feeling ============ */
+const feels = [
+  ["难过",1],["你不在乎我",0],["疲惫",1],["被忽视",0],
+  ["焦虑",1],["你应该懂我",0],["温暖",1],["你太自私",0],
+  ["失望",1],["我觉得我没用",0],["感动",1],["被利用",0]
+];
+const qf = document.getElementById('q-feel');
+feels.forEach((f,i)=>{
+  qf.insertAdjacentHTML('beforeend',`<label class="opt" style="cursor:pointer"><input type="checkbox" data-i="${i}" class="qf-c" style="margin-right:5px">${f[0]}</label>`);
+});
+document.getElementById('q-feel-check').onclick=()=>{
+  let ok=0,bad=0,miss=0;
+  qf.querySelectorAll('.qf-c').forEach(c=>{
+    const t=feels[+c.dataset.i][1],lab=c.parentElement;
+    lab.classList.remove('correct','wrong');
+    if(c.checked&&t){ok++;lab.classList.add('correct')}
+    else if(c.checked&&!t){bad++;lab.classList.add('wrong')}
+    else if(!c.checked&&t){miss++}
+  });
+  document.getElementById('q-feel-result').innerHTML=
+    `<span style="color:var(--sage)">✓ ${ok}</span> · <span style="color:var(--rose)">✗ ${bad}（这些是想法）</span> · 漏 ${miss}`;
+  document.getElementById('q-feel-result').className='r';
+  markDone('p2');
+};
+
+/* ============ Practice 3: Need ============ */
+const needCases = [
+  {q:"老板：'你怎么这点事都做不好！'  老板真正需要的是？",a:"工作的可靠与质量",o:["工作的可靠与质量","让你难堪","证明自己聪明"]},
+  {q:"伴侣：'你从来不关心我！'",a:"被看见、亲密的连接",o:["指责你","被看见、亲密的连接","离开你"]},
+  {q:"朋友：'你怎么又改时间！'",a:"可预期、被尊重",o:["可预期、被尊重","控制你","结束友谊"]},
+  {q:"孩子：'你根本不爱我！'",a:"确认被爱、被重视",o:["确认被爱、被重视","威胁父母","离家出走"]},
+  {q:"同事：'这根本不是我的锅！'",a:"公正、被尊重",o:["甩锅","公正、被尊重","争功"]}
+];
+const qn=document.getElementById('q-need');
+needCases.forEach((c,i)=>{
+  qn.insertAdjacentHTML('beforeend',`<div class="qbox"><div class="q">${c.q}</div>
+    <div class="opts">${c.o.map(o=>`<button class="opt" data-i="${i}" data-v="${o}">${o}</button>`).join('')}</div>
+    <div class="r"></div></div>`);
+});
+qn.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.i,v=b.dataset.v,c=needCases[i];
+  const box=b.closest('.qbox'),r=box.querySelector('.r');
+  if(r.dataset.d) return; r.dataset.d=1;
+  box.querySelectorAll('.opt').forEach(x=>{
+    if(x.dataset.v===c.a) x.classList.add('correct');
+    else if(x===b) x.classList.add('wrong');
+  });
+  if(v===c.a){r.textContent='✓ 指责的话之下，是未被满足的需要。';r.className='r ok'}
+  else {r.textContent='再想想——指责通常是表达需要的拙劣方式。';r.className='r bad'}
+  markDone('p3');
+});
+
+/* ============ Practice 4: Request ============ */
+const reqs = [
+  ["你能不能不要这么烦人。","bad","太抽象，负面表述。"],
+  ["下周一前能否把第二节初稿发我？","good","具体、当下、可执行。"],
+  ["你给我闭嘴！","bad","命令。"],
+  ["接下来 10 分钟我先讲完，可以吗？","good","明确、可拒绝。"],
+  ["你以后要尊重我。","bad","抽象，未指明行为。"],
+  ["今晚 8-9 点你愿意和我聊聊吗？","good","时间+行动都具体。"],
+  ["你不要总是那么消极。","bad","用否定+模糊词。"]
+];
+const qr=document.getElementById('q-req');
+reqs.forEach((it,i)=>{
+  qr.insertAdjacentHTML('beforeend',`<div class="qbox"><div class="q">${it[0]}</div>
+    <div class="opts"><button class="opt" data-i="${i}" data-v="good">合格请求</button>
+    <button class="opt" data-i="${i}" data-v="bad">命令/不合格</button></div><div class="r"></div></div>`);
+});
+qr.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.i,v=b.dataset.v,ans=reqs[i][1],why=reqs[i][2];
+  const box=b.closest('.qbox'),r=box.querySelector('.r');
+  if(r.dataset.d) return; r.dataset.d=1;
+  box.querySelectorAll('.opt').forEach(x=>{
+    if(x.dataset.v===ans) x.classList.add('correct');
+    else if(x===b) x.classList.add('wrong');
+  });
+  r.textContent = (v===ans?'✓ ':'✗ ')+why;
+  r.className = 'r '+(v===ans?'ok':'bad');
+  markDone('p4');
+});
+
+/* ============ Practice 5: Generator ============ */
+document.getElementById('g-build').onclick=()=>{
+  const a=g1.value.trim(),b=g2.value.trim(),c=g3.value.trim(),d=g4.value.trim();
+  const out=document.getElementById('g-out');
+  out.style.display='block';
+  if(!a||!b||!c||!d){out.innerHTML='<span style="color:var(--rose)">请填完四步。</span>';return}
+  out.innerHTML = `当我看到 <span class="mark-o">${a}</span>，<br/>我感到 <span class="mark-f">${b}</span>，<br/>因为我看重 <span class="mark-n">${c}</span>。<br/>你是否愿意 <span class="mark-r">${d}</span>？`;
+  markDone('p5');
+};
+
+/* ============ Practice 6: Listen ============ */
+const listen = [
+  {q:"朋友：'我这个项目搞砸了，我真是个废物。'",
+   o:[{t:"别这么想，你已经很棒了",ok:0,why:"安慰会切断对方表达"},
+      {t:"你应该这样这样做",ok:0,why:"建议太早"},
+      {t:"你听起来很沮丧，是不是因为很在意结果？",ok:1,why:"反映感受+猜测需要"}]},
+  {q:"伴侣：'你回家就只会看手机！'",
+   o:[{t:"我也很累好不好",ok:0,why:"辩解"},
+      {t:"你是不是觉得孤单，希望我们多陪伴？",ok:1,why:"听到感受与需要"},
+      {t:"那你想我怎样？",ok:0,why:"跳过了被理解的需要"}]},
+  {q:"同事：'老板每次都挑我毛病！'",
+   o:[{t:"他就是这种人，别在意",ok:0,why:"否定对方感受"},
+      {t:"你感到很委屈，是希望努力被看见吗？",ok:1,why:"共情到位"},
+      {t:"你可以这样应对……",ok:0,why:"对方要的是被听见，不是方法"}]}
+];
+const ql=document.getElementById('q-listen');
+listen.forEach((L,i)=>{
+  ql.insertAdjacentHTML('beforeend',`<div class="qbox"><div class="q">${L.q}</div>
+   <div style="display:grid;gap:6px">
+    ${L.o.map((o,j)=>`<button class="opt" style="text-align:left" data-i="${i}" data-j="${j}">${o.t}</button>`).join('')}
+   </div><div class="r"></div></div>`);
+});
+ql.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.i,j=+b.dataset.j,o=listen[i].o[j];
+  const box=b.closest('.qbox'),r=box.querySelector('.r');
+  if(r.dataset.d) return; r.dataset.d=1;
+  box.querySelectorAll('.opt').forEach((x,k)=>{
+    if(listen[i].o[k].ok) x.classList.add('correct');
+    else if(x===b) x.classList.add('wrong');
+  });
+  r.textContent=(o.ok?'✓ ':'✗ ')+o.why;
+  r.className='r '+(o.ok?'ok':'bad');
+  markDone('p6');
+});
+
+/* ============ Practice 8: Rewrite ============ */
+document.getElementById('s-build').onclick=()=>{
+  const a=s1.value.trim(),b=s2.value.trim();
+  const out=document.getElementById('s-out');
+  if(!a||!b){out.innerHTML='<span style="color:var(--rose)">请填两栏。</span>';return}
+  out.innerHTML = `<div class="template">原句：我不得不 <s style="color:#aaa">${a}</s><br/><b>改写：我选择 ${a}，因为我想要 ${b}。</b><p class="muted" style="margin-top:6px">如果"想要"让你点头，就甘心去做；如果让你反感，也许可以停下。</p></div>`;
+  markDone('p8');
+};
+
+/* ============ Scene rewrites ============ */
+const scenes = [
+  ["伴侣 · 归家冷漠","我回来你都不抬头的？当我透明人？","今晚我进门时你在看手机没抬头，我感到有点失落，因为我想感受到被看见。你愿意等下放下手机 2 分钟抱抱我吗？"],
+  ["家长 · 孩子作业","你怎么又不写作业！整天就知道玩！","这周二、周四你放学后直接打游戏到 8 点还没开始作业。我担心你睡不够，因为我希望你身体健康。我们能不能约定先写 30 分钟再玩？"],
+  ["同事 · 被打断","你能不能让我说完！","过去 10 分钟内我说到一半被打断了 3 次。我感到挫败，因为我希望我的思路被完整听见。可以让我先讲完再讨论吗？"],
+  ["老板 · 负面反馈","你这个报告什么都没写清楚！","报告里没写到预算和时间线，我担心客户看不到关键信息。我需要一个能直接沟通的版本。明天中午前能补上这两部分吗？"],
+  ["朋友 · 迟到","你又迟到！没把我当回事？","约好 7 点你 7:40 到。等待时我有点焦躁，因为我看重我们的时间。下次若会晚，能否提前 15 分钟告诉我？"],
+  ["父母 · 催婚","你再不结婚就没人要了！","最近半年每次通话你都提到结婚。我感到压力，因为我希望自己的节奏被尊重。我们能不能这段时间聊点别的？"],
+  ["自己 · 自我批评","我真是个废物，又搞砸了。","这次方案没达到自己的预期。我感到难过，因为我很想做出有价值的东西。我可以先休息，明天重新梳理一遍问题。"],
+  ["朋友 · 借钱不还","你到底什么时候还钱？","三个月前借的 5000 元我们说好月底还。我有点担心，因为我这个月房租也要付。你能告诉我一个具体的还款日期吗？"],
+  ["网络 · 被陌生人攻击","你懂什么，没文化就别说话。","（在心里做）他用了'没文化'这个词。我感到愤怒，因为我看重被尊重。这不是我需要回应的对话——我选择不回复。"],
+  ["自己 · 拒绝加班","好吧我做……但是很烦。","现在是晚上 9 点。我感到疲惫，因为我需要休息与家人时间。今晚我没办法加这个班，明早 9 点我第一时间处理。"]
+];
+const sl=document.getElementById('scene-list');
+scenes.forEach(([t,b,g])=>{
+  sl.insertAdjacentHTML('beforeend',`<div class="scene"><b class="serif">${t}</b>
+   <div class="bad">✗ ${b}</div><div class="good">✓ ${g}</div></div>`);
+});
+
+/* ============ Mistakes ============ */
+const mistakes = [
+  ["用 NVC 句式「打人」","『我感到你是个混蛋』——加了『我感到』不代表就是感受。内容仍是评判。"],
+  ["只表达不倾听","NVC 不是说服术。倾听对方的感受与需要，同样重要。"],
+  ["把请求变成命令","口气像请求，但对方一说不就翻脸——那仍是命令。"],
+  ["混淆感受与想法","'被忽视/被背叛/被利用'不是感受，是对他人行为的评判。感受是自己身上的：难过、孤单、害怕。"],
+  ["用需要当武器","'我需要你闭嘴'——这不是需要，是命令。真正的需要是'安静/空间'。"],
+  ["虚假和谐","压抑自己的需要去迎合，不是 NVC，而是放弃自己。"],
+  ["套模板 · 机械化","死板的 OFNR 会显得做作。先有连接的意图，语言自然会来。"],
+  ["只对别人用","对自己反而最苛刻？NVC 最重要的应用是自我同理。"],
+  ["期待立刻见效","NVC 不是让对方立刻配合的魔法。它帮你看清自己，是否继续由你决定。"],
+  ["把'不评判'变成'没观点'","可以有清晰的立场与边界，但用事实和需要说，不用标签和攻击。"]
+];
+const ml=document.getElementById('mistakes-list');
+mistakes.forEach(([t,d])=>{
+  ml.insertAdjacentHTML('beforeend',`<div class="card"><h3>⚠ ${t}</h3><p class="muted" style="margin:4px 0 0">${d}</p></div>`);
+});
+
+/* ============ Phrases ============ */
+const phrases = [
+  ["你总是这样！","最近一周有 3 次这种情况。"],
+  ["你从来不听我说话。","我感到没有被听到。"],
+  ["你就是懒。","这次没按时完成。"],
+  ["别闹了！","我现在没办法继续。"],
+  ["你就不能体谅我一下吗？","我很累，我需要休息。"],
+  ["你在逼我。","我感到压力，我需要自己选择。"],
+  ["你根本不在乎我。","我感到孤单，我需要陪伴。"],
+  ["是你让我生气的！","听到这句话我很生气，因为我看重被尊重。"],
+  ["闭嘴！","我现在很难继续听，我需要暂停。"],
+  ["你必须听我的。","我希望你能考虑这个建议，因为……"],
+  ["随便你！","我暂时不知道怎么回应，想先安静一会儿。"],
+  ["这事跟我没关系。","我不清楚自己能贡献什么，可以告诉我你具体希望我做什么吗？"],
+  ["都是你的错！","结果不如预期，我们可以一起看看怎么改进。"],
+  ["你脑子进水了？","我不理解这个决定，能解释一下考虑吗？"],
+  ["你也不看看自己！","（先不回应攻击）你现在很生气，是希望被认真对待吗？"],
+  ["不可能，想都别想。","我暂时看不到这么做的可行性，我担心……"],
+  ["老板又给我找事！","老板让我重做 PPT，我感到挫败，因为我花了很多时间。"],
+  ["我就是这样的人！","我现在不想改变这件事，因为我看重……"],
+  ["你真讨厌！","你刚刚说的这句话让我很不舒服。"],
+  ["你开心就好。","我选择先支持你，同时我有一些担心想告诉你。"],
+  ["别哭了！","看到你哭我有些心疼，你愿意告诉我发生了什么吗？"],
+  ["别想那么多！","你脑子里在想很多事，是吗？"],
+  ["没事就是没事。","我现在不太想说，我需要一点时间整理。"],
+  ["你这样让我很失望。","我原本很期待，现在有些难过。"],
+  ["这点小事至于吗？","对你来说这似乎很重要。"],
+  ["你怎么又这样？","这周第二次发生这种情况。"],
+  ["我不得不加班。","我选择加班，因为我想按时交付。"],
+  ["我应该对父母更好。","我希望和父母有更多连接，这周我想做一件具体的事。"],
+  ["我没资格抱怨。","我此刻感到疲惫，这是真实的。"],
+  ["你让我很失望。","我对这个结果感到难过，因为我希望……"]
+];
+const pl=document.getElementById('phrase-list');
+phrases.forEach(([a,b])=>{
+  pl.insertAdjacentHTML('beforeend',`<div class="scene"><div class="bad">✗ ${a}</div><div class="good">✓ ${b}</div></div>`);
+});
+
+/* ============ Vocab ============ */
+const fp="兴奋 欣喜 满足 平静 感激 温暖 放松 感动 充实 有力量 乐观 好奇 自在 安心 自豪 投入 愉悦 踏实 信任 温柔";
+const fn="难过 失望 孤单 疲惫 焦虑 担忧 害怕 烦躁 愤怒 尴尬 羞愧 麻木 挫败 无助 受伤 空虚 不安 紧张 嫉妒 内疚 沮丧 迷茫";
+const pseudo="被忽视 被利用 被抛弃 被背叛 被误解 被操纵 被贬低 被看扁 被欺负 被压榨 被嫌弃";
+const redflag="懒 笨 自私 冷漠 虚伪 不负责任 不成熟 太敏感 太情绪化 总是 从不 每次 明明 就 竟然 居然";
+document.getElementById('feel-pos').innerHTML = fp.split(' ').map(x=>`<span>${x}</span>`).join('');
+document.getElementById('feel-neg').innerHTML = fn.split(' ').map(x=>`<span>${x}</span>`).join('');
+document.getElementById('pseudo').innerHTML = pseudo.split(' ').map(x=>`<span style="background:rgba(196,106,106,.08);border-color:rgba(196,106,106,.3)">${x}</span>`).join('');
+document.getElementById('redflag').innerHTML = redflag.split(' ').map(x=>`<span style="background:rgba(196,106,106,.08);border-color:rgba(196,106,106,.3)">${x}</span>`).join('');
+const needs = {
+  "生存/安全":["休息","健康","食物","居所","安全","稳定"],
+  "自主":["选择","自由","空间","独立","节奏"],
+  "连接":["爱","亲密","陪伴","理解","被看见","归属","信任"],
+  "尊重":["被尊重","被接纳","平等","公正","被认可"],
+  "意义":["贡献","价值感","成长","学习","创造"],
+  "玩与美":["乐趣","放松","美","幽默","灵感"],
+  "诚实共情":["真诚","透明","共情","被听见"],
+  "和谐":["秩序","和平","可预期","清晰"]
+};
+const nd=document.getElementById('needs');
+Object.entries(needs).forEach(([k,v])=>{
+  nd.insertAdjacentHTML('beforeend',`<div style="border:1px solid var(--line);border-radius:10px;padding:8px 10px">
+    <b class="serif" style="font-size:13px">${k}</b>
+    <div style="color:var(--muted);font-size:12px;margin-top:3px">${v.join(' · ')}</div></div>`);
+});
+
+/* ============ Progress tracking ============ */
+const done = new Set(JSON.parse(localStorage.getItem('nvc_done')||'[]'));
+function markDone(id){ done.add(id); localStorage.setItem('nvc_done',JSON.stringify([...done])); updateProg(); }
+function updateProg(){ document.getElementById('progress').textContent = `${done.size}/8 练习`; }
+updateProg();
+
+/* ============ Journal ============ */
+function loadJ(){
+  const list = JSON.parse(localStorage.getItem('nvc_journal')||'[]');
+  const box = document.getElementById('j-list');
+  box.innerHTML = list.slice().reverse().slice(0,5).map(j=>
+   `<div class="card" style="margin:6px 0;padding:10px"><div class="muted" style="font-size:11px">${j.d}</div>
+    <div style="font-size:13px;margin-top:4px"><span class="mark-o">${j.o}</span> → <span class="mark-f">${j.f}</span> → <span class="mark-n">${j.n}</span> → <span class="mark-r">${j.r}</span></div></div>`
+  ).join('') || '<p class="muted" style="font-size:12px">尚无记录。</p>';
+}
+document.getElementById('j-save').onclick=()=>{
+  const o=document.querySelector('.j1').value.trim(),
+        f=document.querySelector('.j2').value.trim(),
+        n=document.querySelector('.j3').value.trim(),
+        r=document.querySelector('.j4').value.trim();
+  if(!o||!f||!n||!r){ alert('请填完四项'); return }
+  const list = JSON.parse(localStorage.getItem('nvc_journal')||'[]');
+  list.push({o,f,n,r,d:new Date().toLocaleString('zh-CN')});
+  localStorage.setItem('nvc_journal',JSON.stringify(list));
+  document.querySelectorAll('.j1,.j2,.j3,.j4').forEach(el=>el.value='');
+  loadJ();
+};
+loadJ();
+</script>
+</body>
+</html>
